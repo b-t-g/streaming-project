@@ -24,10 +24,14 @@ someFunc op =
   .| Conduit.mapC (\x -> parse parseInput "parseInput" x)
   .| Conduit.mapC (
   \x -> case x of
-          Left y   -> op
-          Right z -> process op z
+          Left y   -> Nothing
+          Right z  -> Just $ process op z
   )
-  .| Cc.mapM_ (\x -> (print $ info x) >> someFunc x)
+  .| Cc.mapM_ (
+  \x ->
+    case x of
+      Just y  -> (print $ info y) >> someFunc y
+      Nothing -> print "Invalid input, omitting value" >> someFunc op)
 
 
 parseInput :: Bsp.Parser Double
