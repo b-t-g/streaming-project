@@ -32,11 +32,13 @@ class Processor i where
   show :: i -> String
 
 instance Processor Process where
-  process (Mean a) val = Mean (process a val)
-  process (Median a) val = Median (process a val)
-  info (Mean a) = info a
-  info (Median a) = info a
-  show = Types.show
+  process (Mean x) val = Mean (process x val)
+  process (Median x) val = Median (process x val)
+  info (Mean x) = info x
+  info (Median x) = info x
+  show (Mean x) = Types.show x
+  show (Median x) = Types.show x
+
 
 instance Processor MedianInfo where
   process info incomingVal =
