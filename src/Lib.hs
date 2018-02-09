@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE LambdaCase #-}
 module Lib
     ( someFunc
     ) where
@@ -21,16 +22,15 @@ someFunc :: (Processor p, Show p) => p -> IO ()
 someFunc op =
   runConduit $
   Cc.stdin
-  .| Conduit.mapC (\x -> parse parseInput "parseInput" x)
+  .| Conduit.mapC (parse parseInput "parseInput")
   .| Conduit.mapC (
-  \x -> case x of
+  \case
           Left y   -> Nothing
           Right z  -> Just $ process op z
   )
   .| Cc.mapM_ (
-  \x ->
-    case x of
-      Just y  -> (print $ info y) >> someFunc y
+  \case
+      Just y  -> print (info y) >> someFunc y
       Nothing -> print "Invalid input, omitting value" >> someFunc op)
 
 

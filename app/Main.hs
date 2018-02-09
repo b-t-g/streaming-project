@@ -11,7 +11,7 @@ main :: IO ()
 main =
   do
     args <- getArgs
-    let op = case (map toLower (head args)) of
+    let op = case map toLower (head args) of
           "mean"   -> Right (Mean (MeanInfo 0 0))
           "median" -> Right (Median (MedianInfo 0 Heap.empty Heap.empty))
           _        -> Left (Mean (MeanInfo (-1) (-1)))
